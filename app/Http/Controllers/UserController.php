@@ -26,7 +26,7 @@ class UserController extends Controller
 
 
     public function allDSList(Request $request){
-        $userDSList = User::with('PaymentWallet')->where('role_id','=',2)->Paginate(15);
+        $userDSList = User::with('UserDetail','PaymentWallet')->where('role_id','=',2)->Paginate(15);
         //dd($userDSList);
         return view('admin.User.userDSList',compact('userDSList'));
 
@@ -35,11 +35,141 @@ class UserController extends Controller
 
 
     public function allROList(Request $request){
-        $userROList = User::with('PaymentWallet')->where('role_id','=',3)->Paginate(15);
+        $userROList = User::with('DS','UserDetail','PaymentWallet')->where('role_id','=',3)->Paginate(15);
         //dd($userDSList);
         return view('admin.User.userROList',compact('userROList'));
 
     }
+
+
+
+    /**
+     * Get a validator for an incoming registration request.
+     *
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'mobile' => 'required|string|max:255|unique:users,id,'.$data['id'],
+            'AgentCode' => 'required|string|max:255|unique:users',
+        ]);
+    }
+
+
+    //Edit Distributor
+    public function editDistributor(Request $request,$id){
+        $user =User::with('UserDetail','PaymentWallet')->find($id);
+        
+        if ($request->isMethod('post')) {
+
+            //dd($user);
+            $validator = $this->validator($request->all());
+            if($validator->fails()) {
+                    $error=$validator->errors()->all();
+                    Session::flash('error', $error);
+                    foreach($request->all() as $k=>$value){
+                        Session::flash($k, $request->get($k));
+                    }
+            }
+            
+            $user =User::find($id);
+            //dd($request->all());
+            $first_name     =   $request->get('first_name');
+            $last_name      =   $request->get('last_name');
+            $mobile         =   $request->get('mobile');
+            $email          =   $request->get('email');
+            $AgentCode      =   $request->get('AgentCode');
+            $status         =   $request->get('status');
+            
+
+            $user['first_name']     =   $first_name;
+            $user['last_name']      =   $last_name;
+            $user['mobile']         =   $mobile;
+            $user['email']          =   $email;
+            $user['AgentCode']      =   $AgentCode;
+            $user['status']         =   $status;
+            try{
+                $user->save();
+                Session::flash('message', $first_name." updated successfully");
+            }catch(Exception $e){
+                Session::flash('message', 'User not Updated!');
+            }
+            return redirect()->route('alldslist');
+        }
+
+        
+        return view('admin.User.DS.edit',array(
+            'user'=>$user,
+            'menuId'=>"",
+
+        ));
+
+    }
+
+
+
+
+    //Edit Distributor
+    public function editRetailer(Request $request,$id){
+        //All DS List
+        $userDS =User::with('DS','UserDetail','PaymentWallet')->where('role_id','=',2)->where('status','=',1)->get();
+
+        $user =User::with('DS','UserDetail','PaymentWallet')->find($id);
+
+        if ($request->isMethod('post')) {
+
+             //dd($user);
+            $validator = $this->validator($request->all());
+
+            if($validator->fails()) {
+                    $error=$validator->errors()->all();
+                    //dd($error);
+                    Session::flash('error', $error);
+                    foreach($request->all() as $k=>$value){
+                        Session::flash($k, $request->get($k));
+                    }
+                    return redirect()->route('editro',['id'=>$id]);
+            }
+
+            $user =User::find($id);
+            //dd($request->all());
+            $first_name     =   $request->get('first_name');
+            $last_name      =   $request->get('last_name');
+            $mobile         =   $request->get('mobile');
+            $email          =   $request->get('email');
+            $AgentCode      =   $request->get('AgentCode');
+            $status         =   $request->get('status');
+            $parent_user_id =   $request->get('parent_user_id');
+            
+
+            $user['parent_user_id'] =   $parent_user_id;
+            $user['first_name']     =   $first_name;
+            $user['last_name']      =   $last_name;
+            $user['mobile']         =   $mobile;
+            $user['email']          =   $email;
+            $user['AgentCode']      =   $AgentCode;
+            $user['status']         =   $status;
+            try{
+                $user->save();
+                Session::flash('message', $first_name." updated successfully");
+            }catch(Exception $e){
+                Session::flash('message', 'User not Updated!');
+            }
+            return redirect()->route('allrolist');
+        }
+
+        
+        return view('admin.User.RO.edit',array(
+            'user'=>$user,
+            'DSList'=>$userDS,
+            'menuId'=>"",
+
+        ));
+
+    }
+
 
 
 

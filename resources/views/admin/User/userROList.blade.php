@@ -39,6 +39,7 @@
                   <thead>
                   <tr>
                     <th>SN</th>
+                    <th>DS</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Mobile</th>
@@ -53,6 +54,7 @@
                   foreach($userROList as $pageListItem){ ?>
                   <tr>
                    <td>{{$count}}</td>
+                   <td>{{$pageListItem['DS']['name']}}-{{$pageListItem['DS']['AgentCode']}}</td>
                    <td>{{$pageListItem['first_name']}}&nbsp;{{$pageListItem['last_name']}}</td>
                    <td>{{$pageListItem['email']}}&nbsp;</td>
                    <td>{{$pageListItem['mobile']}}&nbsp;</td>
@@ -72,7 +74,7 @@
                     <td>{{GeneralHelper::getDateFormate($pageListItem['created_at'])}}</td>
                   
                     <td >
-                      <a href="{{route('editpage',['id'=>$pageListItem['id']])}}" title="Edit {{$pageListItem['first_name']}} Details"><i class="fa fa-pencil"></i>&nbsp;</a>&nbsp;&nbsp;
+                      <a href="{{route('editro',['id'=>$pageListItem['id']])}}" title="Edit {{$pageListItem['first_name']}} Details"><i class="fa fa-pencil"></i>&nbsp;</a>&nbsp;&nbsp;
                       <a href="{{route('deletepage',['id'=>$pageListItem['id']])}}" title="All Wallet Transaction"><i class="fa fa-inr"></i>&nbsp;</a>&nbsp;&nbsp;
                       <a href="{{route('deletepage',['id'=>$pageListItem['id']])}}" title="Delete {{$pageListItem['title']}} Page" onclick="return confirm('Are you sure you want to delete page?')"><i class="fa fa-trash"></i>&nbsp;</a>
                     </td>

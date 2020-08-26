@@ -30,6 +30,13 @@ Route::get('getsubmenu/{id}','PageController@getSubMenu')->name('getsubmenu');
 Route::get('getsubmenuedit/{id}/{selected}','PageController@getSubMenuEdit')->name('getsubmenuedit');
 
 
+//DS and RO Route
+Route::any('alldslist'		,'UserController@allDSList')->name('alldslist');
+Route::any('allrolist'		,'UserController@allROList')->name('allrolist');
+Route::any('editds/{id}'	,'UserController@editDistributor')->name('editds');
+Route::any('editro/{id}'	,'UserController@editRetailer')->name('editro');
+
+
 //JOB Skills Routes goees here
 Route::any('alljobskills','JobController@allJobSkillList')->name('alljobskills');
 Route::any('addskill','JobController@addSkill')->name('addskill');
@@ -50,8 +57,7 @@ Route::any('viewapplication/{id}','JobController@viewApplication')->name('viewap
 Route::any('replyonapplication/{id}','JobController@replyOnApplicationByCandidate')->name('replyonapplication');
 Route::any('replymessageonapplication/{id}','JobController@replyMessageOnApplication')->name('replymessageonapplication');
 
-Route::any('alldslist'		,'UserController@allDSList')->name('alldslist');
-Route::any('allrolist'		,'UserController@allROList')->name('allrolist');
+
 
 
 Route::any('createjob'		,'JobController@createJob')->name('createjob');

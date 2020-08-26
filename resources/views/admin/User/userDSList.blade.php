@@ -72,7 +72,7 @@
                     <td>{{GeneralHelper::getDateFormate($pageListItem['created_at'])}}</td>
                   
                     <td >
-                      <a href="{{route('editpage',['id'=>$pageListItem['id']])}}" title="Edit {{$pageListItem['first_name']}} Details"><i class="fa fa-pencil"></i>&nbsp;</a>&nbsp;&nbsp;
+                      <a href="{{route('editds',['id'=>$pageListItem['id']])}}" title="Edit {{$pageListItem['first_name']}} Details"><i class="fa fa-pencil"></i>&nbsp;</a>&nbsp;&nbsp;
                       <a href="{{route('deletepage',['id'=>$pageListItem['id']])}}" title="All Wallet Transaction"><i class="fa fa-inr"></i>&nbsp;</a>&nbsp;&nbsp;
                       <a href="{{route('deletepage',['id'=>$pageListItem['id']])}}" title="Delete {{$pageListItem['title']}} Page" onclick="return confirm('Are you sure you want to delete page?')"><i class="fa fa-trash"></i>&nbsp;</a>
                     </td>

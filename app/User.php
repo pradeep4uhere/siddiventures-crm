@@ -46,4 +46,9 @@ class User extends Authenticatable
     public function PaymentWallet() {
          return $this->hasOne('App\PaymentWallet', 'user_id', 'id' );
     }
+
+
+    public function DS() {
+         return $this->hasOne('App\User', 'id', 'parent_user_id' );
+    }
 }
