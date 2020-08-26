@@ -112,7 +112,8 @@
 
 
          <li class="treeview 
-          <?php if(strpos($path, '/alldslist')!== false){ ?> active <?php } ?>
+          <?php if(strpos($path, '/alldsbalancerequest')!== false){ ?> active <?php } ?>
+          <?php if(strpos($path, '/allrobalancerequest')!== false){ ?> active <?php } ?>
          
           "> 
           <a href="#">
@@ -123,8 +124,8 @@
             </span>
           </a>
           <ul class="treeview-menu">
-           <li class="<?php if($path=='/alldslist'){ ?>selected <?php } ?>"><a class="nav-link" href="{{route('alldslist')}}"><i class="fa fa-list"></i> All Request From DS</a></li>
-           <li class="<?php if($path=='/alldslist'){ ?>selected <?php } ?>"><a class="nav-link" href="{{route('alldslist')}}"><i class="fa fa-list"></i> All Request From RO</a></li>
+           <li class="<?php if($path=='/alldsbalancerequest'){ ?>selected <?php } ?>"><a class="nav-link" href="{{route('alldsbalancerequest')}}"><i class="fa fa-list"></i> All Request From DS</a></li>
+           <li class="<?php if($path=='/allrobalancerequest'){ ?>selected <?php } ?>"><a class="nav-link" href="{{route('allrobalancerequest')}}"><i class="fa fa-list"></i> All Request From RO</a></li>
 
           </ul>
         </li>

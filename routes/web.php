@@ -36,6 +36,10 @@ Route::any('allrolist'		,'UserController@allROList')->name('allrolist');
 Route::any('editds/{id}'	,'UserController@editDistributor')->name('editds');
 Route::any('editro/{id}'	,'UserController@editRetailer')->name('editro');
 
+//All Payment Balance Request
+Route::any('alldsbalancerequest','DsWalletBalanceRequestController@allDSBalanceRequest')->name('alldsbalancerequest');
+Route::any('allrobalancerequest','DsWalletBalanceRequestController@allROBalanceRequest')->name('allrobalancerequest');
+
 
 //JOB Skills Routes goees here
 Route::any('alljobskills','JobController@allJobSkillList')->name('alljobskills');
