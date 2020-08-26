@@ -39,6 +39,7 @@
                   <thead>
                   <tr>
                     <th>SN</th>
+                    <th>Status</th>
                     <th>User</th>
                     <th>Email</th>
                     <th>Mobile</th>
@@ -55,7 +56,7 @@
                     <th>TXN Date</th>
                     <th>TXN No.</th>
                     <th>Remarks</th>
-                    <th>Status</th>
+                   
                     <th>Created</th>
                     <th>Action</th>
                   </tr>
@@ -63,9 +64,22 @@
                   <tbody>
                   <?php if($userDSList->total()>0){ $count=1;
                   foreach($userDSList as $pageListItem){ ?>
+                 
                   <tr>
-                   <td>{{$count}}</td>
-                   <td nowrap="nowrap">{{$pageListItem['User']['first_name']}}-{{$pageListItem['User']['AgentCode']}}</td>
+                   <td 
+                  
+                   >{{$count}}</td>
+                   <td nowrap="nowrap"
+                   <?php if($pageListItem['status']=='In Process'){ ?> class="alert alert-info" title="New Request" <?php } ?>
+                   <?php if($pageListItem['status']=='Success'){ ?> title="Request Proccessed"  class="alert alert-success"<?php } ?>
+                   <?php if($pageListItem['status']=='Cancel'){ ?> title="Request Cancel"  class="alert alert-danger"<?php } ?>
+                   <?php if($pageListItem['status']=='On Hold'){ ?> title="Request On Hold" class="alert alert-warning"<?php } ?>
+                   >{{$pageListItem['status']}}</td>
+                   <td nowrap="nowrap">
+                     <a href="{{route('requestprocess',['id'=>$pageListItem['id']])}}" title="Push Balance to {{$pageListItem['User']['first_name']}}-{{$pageListItem['User']['AgentCode']}} Wallet">
+                      {{$pageListItem['User']['first_name']}}-{{$pageListItem['User']['AgentCode']}}
+                   </a>
+                   </td>
                    <td nowrap="nowrap">{{$pageListItem['User']['email']}}</td>
                    <td nowrap="nowrap">{{$pageListItem['User']['mobile']}}</td>
                    <td nowrap="nowrap">{{GeneralHelper::getAmount($pageListItem['requested_amount'])}}</td>
@@ -81,7 +95,7 @@
                    <td nowrap="nowrap">{{GeneralHelper::getDateFormate($pageListItem['neft_transfer_date'])}}</td>
                    <td nowrap="nowrap">{{$pageListItem['transaction_number']}}</td>
                    <td nowrap="nowrap">{{$pageListItem['remarks']}}</td>
-                   <td nowrap="nowrap">{{$pageListItem['status']}}</td>
+                   
                    <td nowrap="nowrap">{{GeneralHelper::getDateFormate($pageListItem['created_at'])}}</td>
                    <td >
                       <a href="{{route('editds',['id'=>$pageListItem['id']])}}" title="Push Balance to {{$pageListItem['User']['first_name']}}-{{$pageListItem['User']['AgentCode']}} Wallet"><i class="fa fa-pencil"></i>&nbsp;</a>&nbsp;&nbsp;
@@ -89,6 +103,7 @@
                       <a href="#" title="Reject Request {{$pageListItem['title']}} Page" onclick="return confirm('Are you sure you want to reject this request?')"><i class="fa fa-trash"></i>&nbsp;</a>
                     </td>
                   </tr>
+
                 <?php $count++;}} ?>
                   </tbody>
                 </table>

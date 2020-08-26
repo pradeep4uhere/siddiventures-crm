@@ -27,7 +27,7 @@ class DsWalletBalanceRequestController extends Controller
 
 
     public function allDSBalanceRequest(Request $request){
-        $userDSList = DsWalletBalanceRequest::with('User')->Paginate(15);
+        $userDSList = DsWalletBalanceRequest::with('User')->orderBy('id','DESC')->Paginate(15);
         //dd($userDSList);
         return view('admin.BalanceRequest.DSList',compact('userDSList'));
 
@@ -36,9 +36,9 @@ class DsWalletBalanceRequestController extends Controller
 
 
     public function allROBalanceRequest(Request $request){
-        $userROList = User::with('DS','UserDetail','PaymentWallet')->where('role_id','=',3)->Paginate(15);
+         $userDSList = DsWalletBalanceRequest::with('User')->orderBy('id','DESC')->Paginate(15);
         //dd($userDSList);
-        return view('admin.User.userROList',compact('userROList'));
+        return view('admin.BalanceRequest.DSList',compact('userDSList'));
 
     }
 
@@ -59,14 +59,29 @@ class DsWalletBalanceRequestController extends Controller
     }
 
 
+
+    /**
+     * Get a validator for an incoming registration request.
+     *
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function validatorBalance(array $data)
+    {
+        return Validator::make($data, [
+            'amount' => 'required|string|max:10',
+        ]);
+    }
+
+
     //Edit Distributor
-    public function editDistributor(Request $request,$id){
-        $user =User::with('UserDetail','PaymentWallet')->find($id);
+    public function requestBalanceProcess(Request $request,$id){
+        $DsWalletBalance =DsWalletBalanceRequest::with('User')->find($id);
         
         if ($request->isMethod('post')) {
 
             //dd($user);
-            $validator = $this->validator($request->all());
+            $validator = $this->validatorBalance($request->all());
             if($validator->fails()) {
                     $error=$validator->errors()->all();
                     Session::flash('error', $error);
@@ -74,9 +89,18 @@ class DsWalletBalanceRequestController extends Controller
                         Session::flash($k, $request->get($k));
                     }
             }
-            
-            $user =User::find($id);
+            $id     = $request->get('id');
+            $amount = $request->get('amount');
+            $DsWalletBalance =DsWalletBalanceRequest::with('User')->find($id);
             //dd($request->all());
+            if($amount<=$DsWalletBalance['requested_amount']){
+
+            }else{
+                $error = array("Amount should be less or equal to requested amount.");
+                Session::flash('error', $error);
+                return redirect()->route('requestprocess',['id'=>$id]);
+            }
+
             $first_name     =   $request->get('first_name');
             $last_name      =   $request->get('last_name');
             $mobile         =   $request->get('mobile');
@@ -97,14 +121,13 @@ class DsWalletBalanceRequestController extends Controller
             }catch(Exception $e){
                 Session::flash('message', 'User not Updated!');
             }
-            return redirect()->route('alldslist');
+            return redirect()->route('requestprocess',['id'=>$id]);
         }
 
         
-        return view('admin.User.DS.edit',array(
-            'user'=>$user,
-            'menuId'=>"",
-
+        return view('admin.BalanceRequest.pushBalance',array(
+            'DsWalletBalance'=>$DsWalletBalance,
+            'menuId'=>''
         ));
 
     }

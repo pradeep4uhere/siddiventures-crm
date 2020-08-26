@@ -39,6 +39,7 @@ Route::any('editro/{id}'	,'UserController@editRetailer')->name('editro');
 //All Payment Balance Request
 Route::any('alldsbalancerequest','DsWalletBalanceRequestController@allDSBalanceRequest')->name('alldsbalancerequest');
 Route::any('allrobalancerequest','DsWalletBalanceRequestController@allROBalanceRequest')->name('allrobalancerequest');
+Route::any('requestprocess/{id}','DsWalletBalanceRequestController@requestBalanceProcess')->name('requestprocess');
 
 
 //JOB Skills Routes goees here
