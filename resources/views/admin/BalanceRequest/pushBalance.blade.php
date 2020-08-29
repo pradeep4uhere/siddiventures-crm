@@ -63,16 +63,7 @@
                @include('admin.BalanceRequest.editBody')
                
 
-              
-              
-              <!-- /.box-body -->
-              <div class="box-footer">
-               
-                <input type="hidden" name="id" value="{{$DsWalletBalance['id']}}"/>
-                <button type="button" class="btn btn-danger Cancel">Cancel</button>
-                 <button type="submit" class="btn btn-info" onclick="return confirm('Are you sure you want to transfer amount?')">Submit For Transfer</button>
-              </div>
-              <!-- /.box-footer -->
+             
             </form>
           <!-- /.box -->
          

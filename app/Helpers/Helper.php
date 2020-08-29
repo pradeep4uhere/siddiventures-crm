@@ -10,6 +10,7 @@ use App\State;
 use App\City;
 use App\PaymentWallet;
 use App\Menu;
+use App\PaymentWalletTransaction;
 
 
 class Helper {
@@ -25,6 +26,18 @@ class Helper {
         $user = DB::table('users')->where('id', $user_id)->first();
          
         return (isset($user->email) ? $user->email : '');
+    }
+
+
+   /**
+     * @return integer
+     */
+    public static function getPaymentWalletId() {
+        if(Auth::check()){
+            $userId = Auth::user()->id;
+            $PaymentWalletArr  = PaymentWallet::where('user_id', $userId)->first();
+            return (isset($PaymentWalletArr) ? $PaymentWalletArr->id : '');
+        }
     }
 
 
@@ -129,21 +142,20 @@ class Helper {
      */
     public static function getWalletBalance() {
 
-        if(Auth::guard('user')->check()){
-            $user_id = Auth::user()->id;
+        if(Auth::check()){
+            $user_id =  Auth::user()->id;
             $PaymentWallet = PaymentWallet::where('user_id','=',$user_id)->first();
+            $payment_wallet_id = $PaymentWallet['id'];
+            //get The Balance Tranasction
+            $paymentWT = PaymentWalletTransaction::where('payment_wallet_id','=',$payment_wallet_id)->where('user_id','=',$user_id)->get();
             if(!empty($PaymentWallet)){
-                return $PaymentWallet['total_balance'];
+                return self::getAmount($PaymentWallet['total_balance']);
             }else{
                 return '0.00';    
             }
         }
 
-        if(Auth::guard('ro')->check()){
-            return number_format(15000,2);   
-        }
-    
-              
+       
     }
 
 

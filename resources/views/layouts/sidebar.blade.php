@@ -15,7 +15,7 @@
       <ul class="sidebar-menu" data-widget="tree">
         
         <?php $menuarr = GeneralHelper::getAllSideBarMenu();?>
-         <li class="header">Menu</li>
+         <li class="header"><h4>Balance: {{GeneralHelper::getWalletBalance()}}<h4></li>
          <li class="treeview <?php if($path=='/setting'){ ?>active <?php } ?>">
           <a href="#">
             <i class="fa fa-gears"></i>
@@ -67,7 +67,18 @@
           <?php } ?>
            <li><a class="nav-link" href="{{ route('addmenu') }}"><i class="fa fa-plus"></i> Add Menu</a></li>
         </ul>
-
+          <li class="treeview <?php if($path=='/setting'){ ?>active <?php } ?>">
+          <a href="#">
+            <i class="fa fa-gears"></i>
+            <span>Commission Setting</span>
+            <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+          <li class="<?php if($path=='/setting'){ ?>selected <?php } ?>"><a class="nav-link" href="{{ route('setting') }}"><i class="fa fa-gear"></i>All Commission</a></li>
+          </ul>
+        </li>
 
                
          <!-- <li><a class="nav-link" href="{{ route('allpages') }}"> <i class="fa fa-tag"></i></i>Manage Pages</a></li> -->

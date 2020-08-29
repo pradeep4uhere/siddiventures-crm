@@ -34,6 +34,11 @@ class DsWalletBalanceRequest extends Model
         'neft_transfer_date',
         'transaction_number',
         'remarks',
+        'admin_remarks',
+        'is_transfer_into_company_wallet',
+        'transfer_transaction_no',
+        'transfer_date_to_company',
+        
     ];
 
 

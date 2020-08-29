@@ -174,47 +174,71 @@
                 </tr>
                 <tr>
                 <td>
-                  <select name="status" class="form-control" id="statusOptions" onchange="openAmount()">
-                    <option value="Success">Success</option>
-                    <option value="On Hold">On Hold</option>
-                    <option value="Cancel">Cancel</option>
-                    <option value="In Process">In Process</option>
+                  <select name="status" class="form-control" id="statusOptions" onchange="openAmount()" 
+                  <?php if($DsWalletBalance['is_transfer_into_company_wallet']==1){  ?> disabled="disabled" <?php } ?>> 
+                    <option value="Success" 
+                    <?php if($DsWalletBalance['status']=='Success'){ ?> selected="selected" <?php } ?>>Success</option>
+                    <option value="On Hold" <?php if($DsWalletBalance['status']=='On Hold'){ ?> selected="selected" <?php } ?>>On Hold</option>
+                    <option value="Cancel" <?php if($DsWalletBalance['status']=='Cancel'){ ?> selected="selected" <?php } ?>>Cancel</option>
+                    <option value="In Process" <?php if($DsWalletBalance['status']=='In Process'){ ?> selected="selected" <?php } ?>>In Process</option>
                   </select>
-                  
+                  <input type="hidden" name="id" value="{{$DsWalletBalance['id']}}"/>
                 </td>
                 </tr>
-
-              
-
-              
               </tbody>
             </table>
             </div>
-            <!-- /.box-body -->
-          
   </div>
   </div>
 
 
 
+
+
+<?php if($DsWalletBalance['is_transfer_into_company_wallet']==1){  ?>
   <hr/>
-<div class="form-group" id="amountdiv" style="display: none">
+<div class="form-group" >
 
-
-  <div class="col-sm-6 col-lg-6 col-md-6">
-
+   <div class="col-sm-12 col-lg-12 col-md-12">
             <!-- /.box-header -->
             <div class="box-body no-padding">
               <table class="table table-striped">
                 <tbody><tr>
-                  <th>Push Balance To Wallet- {{$DsWalletBalance['User']['first_name']}}-{{$DsWalletBalance['User']['AgentCode']}}</th>
-                  <th>&nbsp;</th>
-                  <th>&nbsp;</th>
+                  <th colspan="3">
+                    <?php if($DsWalletBalance['is_transfer_into_company_wallet']==1){  ?>
+                        <div class="alert alert-success">
+                          <p><?php echo GeneralHelper::getAmount($DsWalletBalance['requested_amount']). " has beed credited to  company wallet." ?></p>
+                        </div>
+                    <?php } ?>
+                  </th>
                 </tr>
                 <tr>
-                  <td colspan="3">
-                  <input type="number" name="amount" id="amount" required="required" class="form-control" placeholder="Enter Amount i.e 5000">
-                </td>
+                  <td>Amount Credited</td>
+                  <td>:</td>
+                  <td>{{GeneralHelper::getAmount($DsWalletBalance['requested_amount'])}}</td>
+                </tr>
+                <tr>
+                  <td>Transaction Date</td>
+                  <td>:</td>
+                  <td>{{$DsWalletBalance['transfer_date_to_company']}}</td>
+                </tr>
+                <tr>
+                  <td>Transaction No</td>
+                  <td>:</td>
+                  <td>{{$DsWalletBalance['transfer_transaction_no']}}</td>
+                </tr>
+                <tr>
+                  <td>Status</td>
+                  <td>:</td>
+                  <td>
+                    <?php if($DsWalletBalance['is_transfer_into_company_wallet']==1){  
+                      echo "<font color='green'><b>Success</b></font>"; 
+                    }else{ 
+                      echo "<font color='red'><b>In Process</b></font>";
+                    } ?>
+
+                  
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -222,18 +246,72 @@
             <!-- /.box-body -->
           
   </div>
+</div>
+<?php } ?>
 
+<?php if($DsWalletBalance['is_transfer_into_company_wallet']==0){  ?>
+<div id="amountdiv" style="display: none">
+<div class="form-group" >
+  <div class="col-sm-6 col-lg-6 col-md-6">
+            <!-- /.box-header -->
+            <div class="box-body no-padding">
+              <table class="table table-striped">
+                <tbody><tr>
+                  <th colspan="3">Push Balance To Company Wallet</th>
+                  
+                </tr>
+                <tr>
+                  <td style="width: 50%">Available Balance</td>
+                  <td>:</td>
+                  <td>{{GeneralHelper::getWalletBalance()}}</td> 
+                </tr>
+              
+                 <tr>
+                  <td colspan="3">
+                  <input type="number" name="amount" id="amount" required="required" class="form-control" placeholder="Enter Amount i.e 5000" value="{{$DsWalletBalance['requested_amount']}}" readonly="readonly">
+                </td>
+                </tr>
+                <tr>
+                  <td colspan="3">
+                  <input type="text" name="remarks" id="remarks" class="form-control" placeholder="Enter remarks" >
+                </td>
+                </tr>
+              </tbody>
+            </table>
+            </div>
+          </div>
 
-  </div>
+  <!-- /.box-body -->
+  
+       </div>
+       <div class="form-group" >
+        <div class="box-footer">
+       
+        <button type="button" class="btn btn-danger Cancel">Cancel</button>
+        <button type="submit" class="btn btn-info" onclick="return confirm('Are you sure you want to transfer amount into Company Wallet?')">Submit For Transfer</button>
+        </div>
+        </div>
+       </div>
+
+<div class="form-group" id="otherButton" >
+<div class="box-footer">
+
+<button type="button" class="btn btn-danger Cancel">Cancel</button>
+<button type="submit" class="btn btn-info" >Submit</button>
+</div>
+</div>       
 
 <script type="text/javascript">
   function openAmount(e){
     var value = $("#statusOptions").val();
     if(value == 'Success'){
       $("#amountdiv").show();
+      $("#otherButton").hide();
     }else{
       $("#amountdiv").hide();
+      $("#otherButton").show();
     }
    
   }
 </script>
+<?php } ?>
