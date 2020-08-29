@@ -100,7 +100,7 @@ class DsWalletBalanceRequestController extends Controller
             $id      = $request->get('id');
             $amount  = $request->get('amount');
             $remarks = $request->get('remarks');
-            $DsWalletBalance =DsWalletBalanceRequest::where('status','=','In Process')
+            $DsWalletBalance =DsWalletBalanceRequest::where('status','!=','Success')
                                 ->where('is_transfer_into_company_wallet','=',0)
                                 ->where('payment_wallet_transaction_id','=',0)
                                 ->with('User')
