@@ -40,8 +40,8 @@
                   <tr>
                     <th>SN</th>
                     <th>Status</th>
-                    <th>Pushed</th>
                     <th>User</th>
+                    <th>Balance</th>
                     <th>Email</th>
                     <th>Mobile</th>
                     <th>Amount</th>
@@ -59,7 +59,6 @@
                     <th>Remarks</th>
                    
                     <th>Created</th>
-                    <th>Action</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -93,8 +92,11 @@
                   <?php } ?>
                    <td nowrap="nowrap">
                      <a href="{{route('requestprocess',['id'=>$pageListItem['id']])}}" title="Push Balance to {{$pageListItem['User']['first_name']}}-{{$pageListItem['User']['AgentCode']}} Wallet">
-                      {{$pageListItem['User']['first_name']}}-{{$pageListItem['User']['AgentCode']}}
+                      {{$pageListItem['User']['first_name']}}-{{$pageListItem['User']['AgentCode']}}<br/>
                    </a>
+                   </td>
+                    <td nowrap="nowrap">
+                       {{GeneralHelper::getAmount(GeneralHelper::getWalletBalacneOfUser($pageListItem['User']['id']))}}
                    </td>
                    <td nowrap="nowrap">{{$pageListItem['User']['email']}}</td>
                    <td nowrap="nowrap">{{$pageListItem['User']['mobile']}}</td>
@@ -113,11 +115,6 @@
                    <td nowrap="nowrap">{{$pageListItem['remarks']}}</td>
                    
                    <td nowrap="nowrap">{{GeneralHelper::getDateFormate($pageListItem['created_at'])}}</td>
-                   <td >
-                      <a href="{{route('editds',['id'=>$pageListItem['id']])}}" title="Push Balance to {{$pageListItem['User']['first_name']}}-{{$pageListItem['User']['AgentCode']}} Wallet"><i class="fa fa-pencil"></i>&nbsp;</a>&nbsp;&nbsp;
-                      
-                      <a href="#" title="Reject Request {{$pageListItem['title']}} Page" onclick="return confirm('Are you sure you want to reject this request?')"><i class="fa fa-trash"></i>&nbsp;</a>
-                    </td>
                   </tr>
 
                 <?php $count++;}} ?>

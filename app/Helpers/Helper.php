@@ -41,6 +41,18 @@ class Helper {
 
 
 
+     /**
+     * @return integer
+     */
+    public static function getWalletBalacneOfUser($user_id) {
+        $userId = $user_id;
+        $PaymentWalletArr  = PaymentWallet::where('user_id','=', $userId)->first();
+        //dd($PaymentWalletArr);
+        return (isset($PaymentWalletArr) ? $PaymentWalletArr->total_balance : '');
+    }
+
+
+
 
     /**
      * @return integer
