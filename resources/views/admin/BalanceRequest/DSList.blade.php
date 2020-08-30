@@ -40,6 +40,7 @@
                   <tr>
                     <th>SN</th>
                     <th>Status</th>
+                    <th>Pushed</th>
                     <th>User</th>
                     <th>Email</th>
                     <th>Mobile</th>
@@ -63,18 +64,33 @@
                   </thead>
                   <tbody>
                   <?php if($userDSList->total()>0){ $count=1;
-                  foreach($userDSList as $pageListItem){ ?>
-                 
+                  foreach($userDSList as $pageListItem){ 
+                      if($pageListItem['id']==4){
+                        //dd($pageListItem); 
+                      }
+                  ?>
                   <tr>
                    <td 
                   
                    >{{$count}}</td>
-                   <td nowrap="nowrap"
-                   <?php if($pageListItem['status']=='In Process'){ ?> class="alert alert-info" title="New Request" <?php } ?>
-                   <?php if($pageListItem['status']=='Success'){ ?> title="Request Proccessed"  class="alert alert-success"<?php } ?>
-                   <?php if($pageListItem['status']=='Cancel'){ ?> title="Request Cancel"  class="alert alert-danger"<?php } ?>
-                   <?php if($pageListItem['status']=='On Hold'){ ?> title="Request On Hold" class="alert alert-warning"<?php } ?>
-                   >{{$pageListItem['status']}}</td>
+                  <?php if($pageListItem['is_transfer_into_company_wallet']==0){ ?>
+                  <td nowrap="nowrap">
+                   <a href="#" 
+                    
+                      <?php if($pageListItem['status']=='In Process'){ ?> class="btn btn-info" title="New Request" <?php } ?>
+                     <?php if($pageListItem['status']=='Success' && $pageListItem['is_transfer_into_company_wallet']==1){ ?> title="Request Proccessed"  class="btn btn-success"<?php } ?>
+                     <?php if($pageListItem['status']=='Cancel'){ ?> title="Request Cancel"  class="btn btn-danger"<?php } ?>
+                     <?php if($pageListItem['status']=='On Hold'){ ?> title="Request On Hold" class="btn btn-warning"<?php } ?>>
+                      {{$pageListItem['status']}}
+                    </a>
+                  </td>
+                  <?php  } ?>
+                  <?php if($pageListItem['status']=='Success' 
+                  && $pageListItem['is_transfer_into_company_wallet']==1){ ?>
+                  <td>
+                    <a href="{{route('pushbalancetods',['id'=>$pageListItem])}}" class="btn btn-warning">Push Balance</a>
+                  </td>
+                  <?php } ?>
                    <td nowrap="nowrap">
                      <a href="{{route('requestprocess',['id'=>$pageListItem['id']])}}" title="Push Balance to {{$pageListItem['User']['first_name']}}-{{$pageListItem['User']['AgentCode']}} Wallet">
                       {{$pageListItem['User']['first_name']}}-{{$pageListItem['User']['AgentCode']}}

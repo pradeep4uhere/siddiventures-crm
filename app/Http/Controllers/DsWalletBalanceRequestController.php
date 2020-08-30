@@ -13,6 +13,8 @@ use App\UserDetail;
 use App\PaymentWallet;
 use App\DsWalletBalanceRequest;
 use App\PaymentWalletTransaction;
+use DB;
+use Auth;
 class DsWalletBalanceRequestController extends Controller
 {
     
@@ -29,7 +31,7 @@ class DsWalletBalanceRequestController extends Controller
 
 
     public function allDSBalanceRequest(Request $request){
-        $userDSList = DsWalletBalanceRequest::with('User')->orderBy('id','DESC')->Paginate(15);
+        $userDSList = DsWalletBalanceRequest::with('PaymentWalletTransaction','User')->orderBy('id','DESC')->Paginate(15);
         //dd($userDSList);
         return view('admin.BalanceRequest.DSList',compact('userDSList'));
 
@@ -76,12 +78,28 @@ class DsWalletBalanceRequestController extends Controller
     }
 
 
+
+
+ /**
+     * Get a validator for an incoming registration request.
+     *
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function validatorTransferBalanceAmount(array $data)
+    {
+        return Validator::make($data, [
+            'amount' => 'required|string|max:10',
+        ]);
+    }
+
+
     //Edit Distributor
     public function requestBalanceProcess(Request $request,$id){
-        $DsWalletBalance =DsWalletBalanceRequest::with('User')->find($id);
+        $DsWalletBalance =DsWalletBalanceRequest::with('PaymentWalletTransaction','User')->find($id);
         $userId     = $DsWalletBalance['user_id'];
         $finalArr   = array();
-        // dd($DsWalletBalance);
+        
         if ($request->isMethod('post')) {
 
             $validator = $this->validatorBalance($request->all());
@@ -188,6 +206,117 @@ class DsWalletBalanceRequestController extends Controller
 
     }
 
+
+    //Push Balacne to DS Wallet After approval Of Requested Balance
+    public function PushBalanceTODS(Request $request, $id){
+         $DsWalletBalance =DsWalletBalanceRequest::with('DSPaymentWalletTransaction','PaymentWalletTransaction','User')->find($id);
+           //dd($DsWalletBalance);
+           $dsUserId = $DsWalletBalance['user_id'];
+           $userDSDetails = User::find($dsUserId);
+
+           //dd($userDSDetails);
+           if ($request->isMethod('post')) {
+            $amount  = $request->get('amount');
+            $remarks = $request->get('remarks');
+
+            //Get the Balance Of the Wallet
+            $walletBalance = Helper::getWalletBalance();
+            if($walletBalance < $amount){
+                $error = array("You don't have sufficent balacne.");
+                Session::flash('error', $error);
+                return redirect()->route('pushbalancetods',['id'=>$id]);
+            }
+
+            $validator = $this->validatorTransferBalanceAmount($request->all());
+            if($validator->fails()) {
+                    $error=$validator->errors()->all();
+                    Session::flash('error', $error);
+                    foreach($request->all() as $k=>$value){
+                        Session::flash($k, $request->get($k));
+                    }
+                    return redirect()->route('pushbalancetods',['id'=>$id]);
+            }
+
+            $requestedAmount          = $DsWalletBalance['requested_amount'];
+            $dsWalletBalanceRequestId = $DsWalletBalance['id'];
+            if($amount<=$requestedAmount){
+                DB::beginTransaction();
+                try {
+                        $payment_wallet_id = Helper::getPaymentWalletId();
+                        $PaymentWalletTransactionObj            = new PaymentWalletTransaction();
+                        $PaymentWalletTransactionObj['user_id']             = Auth::user()->id;
+                        $PaymentWalletTransactionObj['payment_wallet_id']   = $payment_wallet_id;
+                        $PaymentWalletTransactionObj['debit_amount']        = $amount;
+                        $PaymentWalletTransactionObj['credit_amount']       = '0.00';
+                        $PaymentWalletTransactionObj['transaction_number']  = time();
+                        $PaymentWalletTransactionObj['transaction_date']    = $this->getCreateDate();
+                        $PaymentWalletTransactionObj['status']              = 'Success';
+                        $PaymentWalletTransactionObj['ds_wallet_balance_request_id']=$dsWalletBalanceRequestId;
+                        $PaymentWalletTransactionObj['remarks']             = $remarks;
+                        if($PaymentWalletTransactionObj->save()){
+                            //Update Wallet of the Admin
+                            //Debit Amount From the wallet for Admin
+                            $PaymentWalletObj = PaymentWallet::find($payment_wallet_id);
+                            $PaymentWalletObj->total_balance = $PaymentWalletObj->total_balance - $amount;
+                            if($PaymentWalletObj->save()){
+                                //Send SMS To Admin Register Mobile Number
+                                $this->sendDebitMessageToAdmin($amount); 
+                            } 
+
+                            //Save Credit Amount Into DS Wallet
+                            $distributor_user_id = $userDSDetails['id']; 
+                            $ds_payment_wallet_id   = Helper::getPaymentWalletIdOfUser($distributor_user_id);
+                            $ds_wallet_balance_request_id = $DsWalletBalance['ds_wallet_balance_request_id'];
+
+                            $PaymentWalletTransObj            = new PaymentWalletTransaction();
+                            $PaymentWalletTransObj['user_id']             = Auth::user()->id;
+                            $PaymentWalletTransObj['payment_wallet_id']   = $ds_payment_wallet_id;
+                            $PaymentWalletTransObj['debit_amount']        = '0.00';
+                            $PaymentWalletTransObj['credit_amount']       = $amount;
+                            $PaymentWalletTransObj['transaction_number']  = time();
+                            $PaymentWalletTransObj['transaction_date']    = $this->getCreateDate();
+                            $PaymentWalletTransObj['status']              = 'Success';
+                            $PaymentWalletTransObj['ds_wallet_balance_request_id']=$dsWalletBalanceRequestId;
+                            $PaymentWalletTransObj['remarks']             = $remarks;
+                            $PaymentWalletTransObj['created_at']          = $this->getCreateDate();
+                            if($PaymentWalletTransObj->save()){
+                                $DSPaymentWalletObj = PaymentWallet::find($ds_payment_wallet_id);
+                                $DSPaymentWalletObj->total_balance=$DSPaymentWalletObj->total_balance + $amount;
+                                if($DSPaymentWalletObj->save()){
+                                    //Send SMS To Admin Register Mobile Number
+                                    $this->sendCreditMessageToDS($distributor_user_id,$amount);
+                                } 
+                            }
+                        }
+                        DB::commit();
+                        $AgentCode =  $userDSDetails['AgentCode'];
+                        $error = "Amount Successfully Transfer To ".$AgentCode;
+                        Session::flash('success', $error);
+                        return redirect()->route('pushbalancetods',['id'=>$id]);
+                } catch (\Exception $ex) {
+                    DB::rollback();
+                    $error = array("Somthing Went Wrong, Please try after later.");
+                    $error = array($ex->getMessage());
+                    Session::flash('error', $error);
+                    return redirect()->route('pushbalancetods',['id'=>$id]);
+
+                }
+                
+
+            }else{
+                 $error = array("Amount should be less and equal to requested amount, Please try again later.");
+                 Session::flash('error', $error);
+                 return redirect()->route('pushbalancetods',['id'=>$id]);
+            }
+
+           
+          }
+          return view('admin.BalanceRequest.pushBalanceToDS',array(
+            'DsWalletBalance'=>$DsWalletBalance,
+            'menuId'=>'',
+            //'finalArr'=>$finalArr
+        ));
+    }
 
     //Add Wallet Balance 
     private function updateCreditWalletBalance($amount){

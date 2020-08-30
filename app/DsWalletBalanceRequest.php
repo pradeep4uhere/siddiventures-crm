@@ -45,4 +45,12 @@ class DsWalletBalanceRequest extends Model
     public function User() {
          return $this->hasOne('App\User', 'id', 'user_id' );
     }
+
+    public function PaymentWalletTransaction() {
+         return $this->hasOne('App\PaymentWalletTransaction', 'id', 'payment_wallet_transaction_id' );
+    }
+
+    public function DSPaymentWalletTransaction() {
+         return $this->hasOne('App\PaymentWalletTransaction', 'id', 'ds_payment_wallet_transaction_id' );
+    }
 }

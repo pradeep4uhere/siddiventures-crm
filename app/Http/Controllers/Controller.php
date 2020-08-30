@@ -15,4 +15,16 @@ class Controller extends BaseController
     public function getCreateDate(){
     	return date("Y-m-d H:i:s");
     }
+
+
+    //Send Debit Message to Admin
+    public function sendDebitMessageToAdmin($amount){
+
+    }
+
+
+    //Send Credit Message to Admin
+    public function sendCreditMessageToDS($userId,$amount){
+
+    }
 }

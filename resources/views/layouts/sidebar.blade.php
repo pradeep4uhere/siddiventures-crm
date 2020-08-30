@@ -15,7 +15,7 @@
       <ul class="sidebar-menu" data-widget="tree">
         
         <?php $menuarr = GeneralHelper::getAllSideBarMenu();?>
-         <li class="header"><h4>Balance: {{GeneralHelper::getWalletBalance()}}<h4></li>
+         <li class="header"><h4>Balance: {{GeneralHelper::getAmount(GeneralHelper::getWalletBalance())}}<h4></li>
          <li class="treeview <?php if($path=='/setting'){ ?>active <?php } ?>">
           <a href="#">
             <i class="fa fa-gears"></i>

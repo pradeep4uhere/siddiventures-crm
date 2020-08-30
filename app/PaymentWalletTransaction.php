@@ -32,6 +32,11 @@ class PaymentWalletTransaction extends Model
 
     public function PaymentWallet() {
          return $this->belongsTo('App\PaymentWallet', 'payment_wallet_id', 'id' );
+    } 
+
+
+    public function DsWalletBalanceRequest() {
+         return $this->belongsTo('App\DsWalletBalanceRequest', 'payment_wallet_transaction_id', 'id' );
     }
 
 

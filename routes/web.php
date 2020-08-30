@@ -40,6 +40,7 @@ Route::any('editro/{id}'	,'UserController@editRetailer')->name('editro');
 Route::any('alldsbalancerequest','DsWalletBalanceRequestController@allDSBalanceRequest')->name('alldsbalancerequest');
 Route::any('allrobalancerequest','DsWalletBalanceRequestController@allROBalanceRequest')->name('allrobalancerequest');
 Route::any('requestprocess/{id}','DsWalletBalanceRequestController@requestBalanceProcess')->name('requestprocess');
+Route::any('pushbalancetods/{id}','DsWalletBalanceRequestController@PushBalanceTODS')->name('pushbalancetods');
 
 
 //JOB Skills Routes goees here

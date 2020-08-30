@@ -32,6 +32,19 @@ class Helper {
    /**
      * @return integer
      */
+    public static function getPaymentWalletIdOfUser($user_id) {
+        $userId = $user_id;
+        $PaymentWalletArr  = PaymentWallet::where('user_id','=', $userId)->first();
+        //dd($PaymentWalletArr);
+        return (isset($PaymentWalletArr) ? $PaymentWalletArr->id : '');
+    }
+
+
+
+
+    /**
+     * @return integer
+     */
     public static function getPaymentWalletId() {
         if(Auth::check()){
             $userId = Auth::user()->id;
@@ -149,7 +162,7 @@ class Helper {
             //get The Balance Tranasction
             $paymentWT = PaymentWalletTransaction::where('payment_wallet_id','=',$payment_wallet_id)->where('user_id','=',$user_id)->get();
             if(!empty($PaymentWallet)){
-                return self::getAmount($PaymentWallet['total_balance']);
+                return $PaymentWallet['total_balance'];
             }else{
                 return '0.00';    
             }
