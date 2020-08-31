@@ -29,6 +29,26 @@ class Helper {
     }
 
 
+
+     /**
+     * @param AgetnCommission Arr and TransactionType Id
+     * 
+     * @return value
+     */
+    public static function getCommissionValue($AgentCommission,$TransactionTypeId) {
+        //echo $TransactionTypeId."<pre>"; 
+        //print_r($AgentCommission);
+        if(!empty($AgentCommission)){
+            foreach($AgentCommission as $item){
+                if($item['transaction_type_id']==$TransactionTypeId){
+                    return $item['commission'];
+                }
+            }
+        }
+        return '0.00';
+    }
+
+
    /**
      * @return integer
      */

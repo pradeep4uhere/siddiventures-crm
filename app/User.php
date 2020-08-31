@@ -48,6 +48,16 @@ class User extends Authenticatable
     }
 
 
+    public function TransactionType() {
+         return $this->belongsTo('App\TransactionType', 'transaction_type_id', 'id' );
+    }
+
+
+    public function AgentCommission() {
+         return $this->hasOne('App\AgentCommission', 'user_id', 'id' )->with('TransactionType');
+    }
+
+
     public function DS() {
          return $this->hasOne('App\User', 'id', 'parent_user_id' );
     }

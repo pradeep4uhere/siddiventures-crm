@@ -67,7 +67,10 @@
           <?php } ?>
            <li><a class="nav-link" href="{{ route('addmenu') }}"><i class="fa fa-plus"></i> Add Menu</a></li>
         </ul>
-          <li class="treeview <?php if($path=='/setting'){ ?>active <?php } ?>">
+          <li class="treeview 
+          <?php if($path=='/transactiontypes'){ ?>active <?php } ?>
+          <?php if($path=='/usercommission'){ ?>active <?php } ?>
+          ">
           <a href="#">
             <i class="fa fa-gears"></i>
             <span>Commission Setting</span>
@@ -76,7 +79,8 @@
             </span>
           </a>
           <ul class="treeview-menu">
-          <li class="<?php if($path=='/setting'){ ?>selected <?php } ?>"><a class="nav-link" href="{{ route('setting') }}"><i class="fa fa-gear"></i>All Commission</a></li>
+          <li class="<?php if($path=='/transactiontypes'){ ?>selected <?php } ?>"><a class="nav-link" href="{{ route('transactiontypes') }}"><i class="fa fa-gear"></i>All Commission Type</a></li>
+          <li class="<?php if($path=='/usercommission'){ ?>selected <?php } ?>"><a class="nav-link" href="{{ route('usercommission') }}"><i class="fa fa-gear"></i>DS/RO Commission Setting</a></li>
           </ul>
         </li>
 

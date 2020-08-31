@@ -41,6 +41,11 @@ Route::any('alldsbalancerequest','DsWalletBalanceRequestController@allDSBalanceR
 Route::any('allrobalancerequest','DsWalletBalanceRequestController@allROBalanceRequest')->name('allrobalancerequest');
 Route::any('requestprocess/{id}','DsWalletBalanceRequestController@requestBalanceProcess')->name('requestprocess');
 Route::any('pushbalancetods/{id}','DsWalletBalanceRequestController@PushBalanceTODS')->name('pushbalancetods');
+Route::any('transactiontypes','TransactionTypeController@transactionTypesList')->name('transactiontypes');
+Route::any('savetransactiontypes','TransactionTypeController@saveTransactionTypesList')->name('savetransactiontypes');
+Route::any('editusercommission/{id}','TransactionTypeController@editUserCommission')->name('editusercommission');
+Route::any('usercommission','TransactionTypeController@userCommissionSetting')->name('usercommission');
+Route::any('deletusercommission/{id}','TransactionTypeController@editUserCommission')->name('deletusercommission');
 
 
 //JOB Skills Routes goees here
