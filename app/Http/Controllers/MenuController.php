@@ -171,9 +171,7 @@ class MenuController extends Controller
             if($menu->save()){
                 Session::flash('message', 'Menu updated successfully!');
                 if($id){
-                    // menutype/7030
-                    return redirect()->route('menutype',['id'=>$menu['parent_id']]);
-                }else{
+            
                     return redirect()->route('allmenumanage');    
                 }
                // return Redirect::back()->with('msg', 'Menu added successfully!');
