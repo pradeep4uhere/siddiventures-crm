@@ -35,17 +35,17 @@
         </div>
         <!-- /.box-header -->
         <div class="box-body">
-          <?php foreach($transactionTypesList as $item){ ?>
+          <?php foreach($transactionTypesList as $item){ //dd($item); ?>
           <div class="row">
 
-            <div class="col-md-4">
+            <div class="col-md-3">
                <div class="form-group">
                   <label for="exampleInputEmail1">Transaction Mode</label>
                   <input type="text" class="form-control"  placeholder="Enter Transaction Mode Type" name="transaction_type_code[]" value="{{$item['transaction_type']}}" readonly="readonly">
                   <input type="hidden" class="form-control"  placeholder="Enter Transaction Mode Type" name="ids[]" value="{{$item['id']}}">
                 </div>
             </div>
-             <div class="col-md-4">
+             <div class="col-md-3">
                 <div class="form-group">
                   <label for="exampleInputEmail1">Comission Type</label>
                   <select name="commission_type[]" class="form-control" disabled="disabled">
@@ -54,11 +54,23 @@
                   </select>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <!-- /.form-group -->
               <div class="form-group">
                   <label for="exampleInputEmail1">Value</label>
                   <input type="text" class="form-control" id="value_{{$item['id']}}" placeholder="Enter Value" name="value[]" value="{{GeneralHelper::getCommissionValue($agentCommission,$item['id'])}}">
+                </div>
+              <!-- /.form-group -->
+            </div>
+            <!-- /.col -->
+              <div class="col-md-3">
+              <!-- /.form-group -->
+              <div class="form-group">
+                  <label for="exampleInputEmail1">Status</label>
+                  <select name="status[]" class="form-control">
+                    <option value="0" <?php if(GeneralHelper::getCommissionStatusValue($agentCommission,$item['id'])==0){ ?> selected="selected" <?php  } ?>>InActive</option>
+                    <option value="1" <?php if(GeneralHelper::getCommissionStatusValue($agentCommission,$item['id'])==1){ ?> selected="selected" <?php  } ?>>Active</option>
+                  </select>
                 </div>
               <!-- /.form-group -->
             </div>

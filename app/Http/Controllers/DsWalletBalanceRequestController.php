@@ -253,6 +253,7 @@ class DsWalletBalanceRequestController extends Controller
                         $PaymentWalletTransactionObj['status']              = 'Success';
                         $PaymentWalletTransactionObj['ds_wallet_balance_request_id']=$dsWalletBalanceRequestId;
                         $PaymentWalletTransactionObj['remarks']             = $remarks;
+                        //dd($PaymentWalletTransactionObj);
                         if($PaymentWalletTransactionObj->save()){
                             //Update Wallet of the Admin
                             //Debit Amount From the wallet for Admin
@@ -279,6 +280,7 @@ class DsWalletBalanceRequestController extends Controller
                             $PaymentWalletTransObj['ds_wallet_balance_request_id']=$dsWalletBalanceRequestId;
                             $PaymentWalletTransObj['remarks']             = $remarks;
                             $PaymentWalletTransObj['created_at']          = $this->getCreateDate();
+                            //dd($PaymentWalletTransObj);
                             if($PaymentWalletTransObj->save()){
                                 $DSPaymentWalletObj = PaymentWallet::find($ds_payment_wallet_id);
                                 $DSPaymentWalletObj->total_balance=$DSPaymentWalletObj->total_balance + $amount;

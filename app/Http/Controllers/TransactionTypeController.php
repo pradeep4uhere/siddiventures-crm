@@ -39,7 +39,7 @@ class TransactionTypeController extends Controller
               $AgentCommissionArr["user_id"]     =   $user['id'];
               $AgentCommissionArr["role_id" ]    =   $user['role_id'];
               $AgentCommissionArr["commission"]  =   $data['value'][$i];
-              $AgentCommissionArr["status"]      =   1;
+              $AgentCommissionArr["status"]      =   $data['status'][$i];
               $AgentCommissionArr["created_at"]  =   date("Y-m-d H:i:s");
               $AgentCommissionArr->save();
             

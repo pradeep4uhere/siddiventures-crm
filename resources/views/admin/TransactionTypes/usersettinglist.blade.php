@@ -22,7 +22,6 @@
                     <?php foreach($transactionTypesList as $item){ ?>
                       <th nowrap="nowrap">{{$item['transaction_type']}}</th>
                     <?php } ?>
-                    <th>Status</th>
                     <th>Action</th>
                   </tr>
                   </thead>
@@ -41,16 +40,25 @@
                          if(!empty($itemACut)){ //dd($itemACut);
                          ?>
                       <td>
-                        {{$itemACut['commission']}}
-                        <?php if($itemACut['TransactionType']['commission_type']=='Percentage'){ echo "%";}?>
-                        
+                        <?php if($itemACut['status']==1){ ?>
+                          <font color="green" style="font-weight: bold;">
+                          <?php if($itemACut['TransactionType']['commission_type']=='Flat'){ echo "₹";} ?>{{$itemACut['commission']}}
+                          <?php if($itemACut['TransactionType']['commission_type']=='Percentage'){ echo "%";}?>
+                          </font>
+                        <?php } ?>
+                        <?php if($itemACut['status']==0){ ?>
+                          <font color="red" style="font-weight: bold;">
+                          <?php if($itemACut['TransactionType']['commission_type']=='Flat'){ echo "₹";} ?>{{$itemACut['commission']}}
+                          <?php if($itemACut['TransactionType']['commission_type']=='Percentage'){ echo "%";}?>
+                          </font>
+                        <?php } ?>
                       </td>
                      <?php }else{ ?>
-                        <td>0.00</td>
+                        <td>₹0.00</td>
                      <?php } ?>
                    
                    <?php } ?>
-                   <td><?php if($ListItem->status==1){  echo "<font color='green'><b>Active</b></font>"; }else{ echo "<font color='red'><b>Inactive</b></font>";} ?>
+                
                      
                    </td>
                     <td>

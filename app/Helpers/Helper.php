@@ -49,6 +49,27 @@ class Helper {
     }
 
 
+
+
+     /**
+     * @param AgetnCommission Arr and TransactionType Id
+     * 
+     * @return value
+     */
+    public static function getCommissionStatusValue($AgentCommission,$TransactionTypeId) {
+        //echo $TransactionTypeId."<pre>"; 
+        //print_r($AgentCommission);
+        if(!empty($AgentCommission)){
+            foreach($AgentCommission as $item){
+                if($item['transaction_type_id']==$TransactionTypeId){
+                    return $item['status'];
+                }
+            }
+        }
+        return '0.00';
+    }
+
+
    /**
      * @return integer
      */
@@ -205,15 +226,19 @@ class Helper {
 
 
 
-    /**
+      /**
      * @param  string
      * @return string
      */
     public static function getAmount($number) {
-      
+        if($number>0){
+            $number = str_replace(',', '',$number);
             return 'Rs '.number_format($number,2);   
-              
+        }else{
+            return 'Rs '.'0.00';
+        }
     }
+
 
 
 
