@@ -10,6 +10,8 @@ use Storage;
 use App\User;
 use App\UserDetail;
 use App\PaymentWallet;
+use App\City;
+use App\DocumentType;
 class UserController extends Controller
 {
     
@@ -52,8 +54,9 @@ class UserController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'mobile' => 'required|string|max:255|unique:users,id,'.$data['id'],
-            'AgentCode' => 'required|string|max:255|unique:users',
+            'mobile'                    => 'required|string|max:255|unique:users,id,'.$data['id'],
+            'AgentCode'                 => 'required|string|max:255|unique:users,id,'.$data['id'],
+            'per_mobile_monthly_limit'  => 'required|string|max:255|unique:users',
         ]);
     }
 
@@ -61,7 +64,9 @@ class UserController extends Controller
     //Edit Distributor
     public function editDistributor(Request $request,$id){
         $user =User::with('UserDetail','PaymentWallet')->find($id);
-        
+        $document_types = DocumentType::where('status','=',1)->get();
+        //dd($document_types);
+       
         if ($request->isMethod('post')) {
 
             //dd($user);
@@ -74,7 +79,8 @@ class UserController extends Controller
                     }
             }
             
-            $user =User::find($id);
+            $user =User::with('UserDetail','PaymentWallet')->find($id);
+            
             //dd($request->all());
             $first_name     =   $request->get('first_name');
             $last_name      =   $request->get('last_name');
@@ -82,33 +88,58 @@ class UserController extends Controller
             $email          =   $request->get('email');
             $AgentCode      =   $request->get('AgentCode');
             $status         =   $request->get('status');
+            $perMonthlyLimit=   $request->get('per_mobile_monthly_limit');
             
 
-            $user['first_name']     =   $first_name;
-            $user['last_name']      =   $last_name;
-            $user['mobile']         =   $mobile;
-            $user['email']          =   $email;
-            $user['AgentCode']      =   $AgentCode;
-            $user['status']         =   $status;
+            $user['first_name']                 =   $first_name;
+            $user['last_name']                  =   $last_name;
+            $user['mobile']                     =   $mobile;
+            $user['email']                      =   $email;
+            $user['AgentCode']                  =   $AgentCode;
+            $user['per_mobile_monthly_limit']   =   $perMonthlyLimit;
+            $user['status']                     =   $status;
             try{
                 $user->save();
+                $this->saveUserDetails($request, $user->id);
                 Session::flash('message', $first_name." updated successfully");
             }catch(Exception $e){
                 Session::flash('message', 'User not Updated!');
             }
             return redirect()->route('alldslist');
         }
-
+        //dd($user);
         
         return view('admin.User.DS.edit',array(
-            'user'=>$user,
-            'menuId'=>"",
+            'user'          =>  $user,
+            'menuId'        =>  "",
+            'document_types'=>  $document_types
 
         ));
 
     }
 
 
+
+    private function saveUserDetails(Request $request, $user_id){
+        $userDetails = UserDetail::where('user_id','=',$user_id)->first();
+        $userDetails['date_of_birth']    =   date('Y-m-d',strtotime($request->get('date_of_birth')));
+        $userDetails['address_line_1']   =   $request->get('address_line_1');
+        $userDetails['address_line_2']   =   $request->get('address_line_2');
+        $userDetails['district']         =   $request->get('district');
+        $userDetails['city_id']          =   $request->get('city_id');
+        $userDetails['pincode']          =   $request->get('pincode');
+        $userDetails['state_id']         =   $request->get('state_id');
+        $userDetails['company_type']     =   $request->get('company_type');
+        $userDetails['company_name']     =   $request->get('company_name');
+        $userDetails['service_by']       =   $request->get('service_by');
+        $userDetails['zone']             =   $request->get('zone');
+        $userDetails['identification_type']=   $request->get('identification_type');
+        $userDetails['is_name_on_pan_card']=   $request->get('is_name_on_pan_card');
+        $userDetails['pan_card_number']=   $request->get('pan_card_number');
+        if($userDetails->save()){
+            return true;
+        }
+    }
 
 
     //Edit Distributor
@@ -142,15 +173,17 @@ class UserController extends Controller
             $AgentCode      =   $request->get('AgentCode');
             $status         =   $request->get('status');
             $parent_user_id =   $request->get('parent_user_id');
+            $perMonthlyLimit=   $request->get('per_mobile_monthly_limit');
             
 
-            $user['parent_user_id'] =   $parent_user_id;
-            $user['first_name']     =   $first_name;
-            $user['last_name']      =   $last_name;
-            $user['mobile']         =   $mobile;
-            $user['email']          =   $email;
-            $user['AgentCode']      =   $AgentCode;
-            $user['status']         =   $status;
+            $user['parent_user_id']         =   $parent_user_id;
+            $user['first_name']             =   $first_name;
+            $user['last_name']              =   $last_name;
+            $user['mobile']                 =   $mobile;
+            $user['email']                  =   $email;
+            $user['AgentCode']              =   $AgentCode;
+            $user['per_mobile_monthly_limit']      =   $perMonthlyLimit;
+            $user['status']                 =   $status;
             try{
                 $user->save();
                 Session::flash('message', $first_name." updated successfully");

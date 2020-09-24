@@ -42,6 +42,7 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Mobile</th>
+                    <th>Monthly Limit</th>
                     <th>Balance</th>
                     <th>Status</th>
                     <th>Created</th>
@@ -56,6 +57,7 @@
                    <td>{{$pageListItem['first_name']}}&nbsp;{{$pageListItem['last_name']}}</td>
                    <td>{{$pageListItem['email']}}&nbsp;</td>
                    <td>{{$pageListItem['mobile']}}&nbsp;</td>
+                   <td>{{GeneralHelper::getAmount($pageListItem['per_mobile_monthly_limit'])}}&nbsp;</td>
                    <td><?php if($pageListItem['PaymentWallet']!=null){ ?>{{GeneralHelper::getAmount($pageListItem['PaymentWallet']['total_balance'])}}
                     <?php }else{
                       echo GeneralHelper::getAmount('0.00');
