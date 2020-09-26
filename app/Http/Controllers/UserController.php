@@ -55,8 +55,9 @@ class UserController extends Controller
     {
         return Validator::make($data, [
             'mobile'                    => 'required|string|max:255|unique:users,id,'.$data['id'],
+            'email'                     => 'required|string|max:255|unique:users,id,'.$data['id'],
             'AgentCode'                 => 'required|string|max:255|unique:users,id,'.$data['id'],
-            'per_mobile_monthly_limit'  => 'required|string|max:255|unique:users',
+            'per_mobile_monthly_limit'  => 'required',
         ]);
     }
 
