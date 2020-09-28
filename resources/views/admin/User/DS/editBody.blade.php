@@ -165,12 +165,25 @@
       {!!GeneralHelper::getDocumentTypeOptionsList($user['UserDetail']['id_proof_type_id'])!!}
     </select>
   </div>
-    <div class="col-sm-6 col-lg-3 col-md-3">
+  <div class="col-sm-6 col-lg-3 col-md-3">
     <label for="inputEmail3" class="control-label">&nbsp;</label><br/>
     <i class="fa fa-download"></i>&nbsp;<a href="{{env('DOCUMENT_URL')}}/{{$user['UserDetail']['id_proof_document']}}" target="_blank">Download</a>
   </div>
-</div>
 
+</div>
+<div class="form-group">
+<div class="col-sm-12 col-lg-12 col-md-12">
+  <?php 
+        $fileArr = explode('.', $user['UserDetail']['id_proof_document']); 
+        $fileExtension = end($fileArr);
+        $fileExtensionArr = array('jpg','jpeg','png','gif');
+        if(in_array($fileExtension,$fileExtensionArr)){
+          $imgStr = env('DOCUMENT_URL')."/".$user['UserDetail']['id_proof_document'];
+          echo "<img src='".$imgStr."' width='500px'/>";
+        }
+  ?>
+</div>
+</div>
 <hr/>
 
 <div class="form-group">
@@ -185,6 +198,19 @@
     <label for="inputEmail3" class="control-label">&nbsp;</label><br/>
     <i class="fa fa-download"></i>&nbsp;<a href="{{env('DOCUMENT_URL')}}/{{$user['UserDetail']['address_proof']}}" target="_blank">Download</a>
   </div>
+</div>
+<div class="form-group">
+<div class="col-sm-12 col-lg-12 col-md-12">
+  <?php 
+        $fileArr = explode('.', $user['UserDetail']['address_proof']); 
+        $fileExtension = end($fileArr);
+        $fileExtensionArr = array('jpg','jpeg','png','gif');
+        if(in_array($fileExtension,$fileExtensionArr)){
+          $imgStr = env('DOCUMENT_URL')."/".$user['UserDetail']['address_proof'];
+          echo "<img src='".$imgStr."' width='500px'/>";
+        }
+  ?>
+</div>
 </div>
 <hr/>
 
@@ -201,5 +227,18 @@
     <label for="inputEmail3" class="control-label">&nbsp;</label><br/>
     <i class="fa fa-download"></i>&nbsp;<a href="{{env('DOCUMENT_URL')}}/{{$user['UserDetail']['business_proof']}}" target="_blank">Download</a>
   </div>
+</div>
+<div class="form-group">
+<div class="col-sm-12 col-lg-12 col-md-12">
+  <?php 
+        $fileArr = explode('.', $user['UserDetail']['business_proof']); 
+        $fileExtension = end($fileArr);
+        $fileExtensionArr = array('jpg','jpeg','png','gif');
+        if(in_array($fileExtension,$fileExtensionArr)){
+          $imgStr = env('DOCUMENT_URL')."/".$user['UserDetail']['business_proof'];
+          echo "<img src='".$imgStr."' width='500px'/>";
+        }
+  ?>
+</div>
 </div>
 
