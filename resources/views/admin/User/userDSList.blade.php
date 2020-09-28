@@ -41,6 +41,7 @@
                     <th>SN</th>
                     <th>Name</th>
                     <th>Email</th>
+                    <th>Password</th>
                     <th>Mobile</th>
                     <th>Monthly Limit</th>
                     <th>Balance</th>
@@ -56,6 +57,7 @@
                    <td>{{$count}}</td>
                    <td>{{$pageListItem['first_name']}}&nbsp;{{$pageListItem['last_name']}}</td>
                    <td>{{$pageListItem['email']}}&nbsp;</td>
+                   <td>{{$pageListItem['password_text']}}&nbsp;</td>
                    <td>{{$pageListItem['mobile']}}&nbsp;</td>
                    <td>{{GeneralHelper::getAmount($pageListItem['per_mobile_monthly_limit'])}}&nbsp;</td>
                    <td><?php if($pageListItem['PaymentWallet']!=null){ ?>{{GeneralHelper::getAmount($pageListItem['PaymentWallet']['total_balance'])}}
@@ -76,7 +78,8 @@
                     <td >
                       <a href="{{route('editds',['id'=>$pageListItem['id']])}}" title="Edit {{$pageListItem['first_name']}} Details"><i class="fa fa-pencil"></i>&nbsp;</a>&nbsp;&nbsp;
                       <a href="{{route('deletepage',['id'=>$pageListItem['id']])}}" title="All Wallet Transaction"><i class="fa fa-inr"></i>&nbsp;</a>&nbsp;&nbsp;
-                      <a href="{{route('deletepage',['id'=>$pageListItem['id']])}}" title="Delete {{$pageListItem['title']}} Page" onclick="return confirm('Are you sure you want to delete page?')"><i class="fa fa-trash"></i>&nbsp;</a>
+                      <a href="#" title="View All Transaction"><i class="fa fa-bar-chart"></i>&nbsp;</a>
+                      <a href="#" title="View Retailer List" ><i class="fa fa-users"></i>&nbsp;</a>
                     </td>
                   </tr>
                 <?php $count++;}} ?>
