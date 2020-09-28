@@ -56,7 +56,7 @@ class UserController extends Controller
         return Validator::make($data, [
             'mobile'                    => 'required|string|max:255|unique:users,id,'.$data['id'],
             'email'                     => 'required|string|max:255|unique:users,id,'.$data['id'],
-            'AgentCode'                 => 'required|string|max:255|unique:users,id,'.$data['id'],
+            'AgentCode'                 => 'required',
             'per_mobile_monthly_limit'  => 'required',
         ]);
     }
@@ -66,7 +66,7 @@ class UserController extends Controller
     public function editDistributor(Request $request,$id){
         $user =User::with('UserDetail','PaymentWallet')->find($id);
         $document_types = DocumentType::where('status','=',1)->get();
-        //dd($document_types);
+       
        
         if ($request->isMethod('post')) {
 
@@ -153,6 +153,7 @@ class UserController extends Controller
         if ($request->isMethod('post')) {
 
              //dd($user);
+            //dd($request->all());
             $validator = $this->validator($request->all());
 
             if($validator->fails()) {
@@ -187,7 +188,8 @@ class UserController extends Controller
             $user['status']                 =   $status;
             try{
                 $user->save();
-                Session::flash('message', $first_name." updated successfully");
+                $this->saveUserDetails($request, $user->id);
+                Session::flash('message', "Retailer ".$first_name." updated successfully");
             }catch(Exception $e){
                 Session::flash('message', 'User not Updated!');
             }
