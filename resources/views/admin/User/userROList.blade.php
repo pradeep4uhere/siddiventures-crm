@@ -39,7 +39,7 @@
                   <thead>
                   <tr>
                     <th>SN</th>
-                    <th>DS</th>
+                    <th>Distributor</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Mobile</th>
@@ -75,8 +75,9 @@
                   
                     <td >
                       <a href="{{route('editro',['id'=>$pageListItem['id']])}}" title="Edit {{$pageListItem['first_name']}} Details"><i class="fa fa-pencil"></i>&nbsp;</a>&nbsp;&nbsp;
-                      <a href="{{route('deletepage',['id'=>$pageListItem['id']])}}" title="All Wallet Transaction"><i class="fa fa-inr"></i>&nbsp;</a>&nbsp;&nbsp;
-                      <a href="{{route('deletepage',['id'=>$pageListItem['id']])}}" title="Delete {{$pageListItem['title']}} Page" onclick="return confirm('Are you sure you want to delete page?')"><i class="fa fa-trash"></i>&nbsp;</a>
+                      <a href="#" title="All Recharge Transaction"><i class="fa fa-inr"></i>&nbsp;</a>&nbsp;&nbsp;
+                      <a href="#" title="All Wallet Transaction"><i class="fa fa-bar-chart"></i>&nbsp;</a>&nbsp;&nbsp;
+                      
                     </td>
                   </tr>
                 <?php $count++;}} ?>
