@@ -67,7 +67,7 @@
             <!-- /.col -->
            <div class="col-md-2">
               <!-- /.form-group -->
-              <?php if(!empty($MoneyTransferCharge)){ dd($MoneyTransferCharge); 
+              <?php if(!empty($MoneyTransferCharge)){ //dd($MoneyTransferCharge); 
                   $valueAmount = $MoneyTransferCharge[$key]['value']; 
                 }else{ 
                    $valueAmount = $item['bank_transfer_amount'];  
