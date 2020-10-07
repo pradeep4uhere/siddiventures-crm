@@ -10,6 +10,8 @@ use Session;
 use App\TransactionType;
 use App\AgentCommission;
 use App\User;
+use App\AmountType;
+use App\MoneyTransferCharge;
 
 class TransactionTypeController extends Controller
 {
@@ -84,12 +86,52 @@ class TransactionTypeController extends Controller
     }
 
 
+    //Save User Money Transfer Charges Form
+    public function userMoneyTransferCommissionSetting(Request $request, $id){
+        $amountType = AmountType::where('status','=',1)->get();
+        $MoneyTransferCharge = [];
+        $MoneyTransferCharge =  MoneyTransferCharge::where('user_id','=',$id)->get()->toArray();
+        
+        //dd($MoneyTransferCharge);
+        $user = User::find($id);
+        return view('admin.TransactionTypes.UserMoneyTransferTypesList',compact('amountType','id','MoneyTransferCharge','user'));
+    }
+
+    //Save User Money Transfer Charges
+    public function saveusermcommission(Request $request){
+        $data = $request->all();
+        $userid = $request->get('id');
+        $count = count($data['transaction_type_code']);
+        $TransactionTypes = array();
+        MoneyTransferCharge::where('user_id','=',$userid)->delete();
+
+        for($i=0;$i<$count;$i++){
+            $TransactionTypes=array(
+                "user_id"       =>  $userid,
+                "amount_type"   =>  $data['ids'][$i],
+                "value"         =>  $data['valueu'][$i],
+                "status"        =>  $data['status'][$i],
+                "created_at"    =>  date('Y-m-d H:i:s')
+            );
+            $TransactionTypeObj = new MoneyTransferCharge();
+            // dd($TransactionTypes);
+            $TransactionTypeObj->create($TransactionTypes);
+        }
+        Session::flash('message', 'Money Transfer Charge Updated Successfully!');
+        return redirect()->route('usermcommission',['id'=>$userid]);
+    }
+    
+
 
     public function transactionTypesList(Request $request){
         $setting = TransactionType::all();
         //dd($setting);
         return view('admin.TransactionTypes.TypesList',compact('setting'));
     }
+
+
+    
+
 
 
     public function saveTransactionTypesList(Request $request){
@@ -114,5 +156,22 @@ class TransactionTypeController extends Controller
         return redirect()->route('transactiontypes');
     }
 
+
+
+
+
+
+    /*****Delete Page Content**************/
+    public function deleteUserCommission(Request $request, $id){
+        $pageContent = TransactionType::find($id);
+        if($pageContent->delete()){
+            Session::flash('message', 'Transaction Type deleted successfully!');
+            return Redirect::back()->with('msg', 'Transaction Type deleted successfully!'); 
+        }else{
+            Session::flash('message', 'Transaction Type not deleted!');
+            return Redirect::back()->with('msg', 'Transaction Type not deleted!');   
+        }
+
+    } 
 
 }

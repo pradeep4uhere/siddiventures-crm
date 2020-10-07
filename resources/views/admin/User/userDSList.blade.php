@@ -80,6 +80,7 @@
                       <a href="#" title="All Recharge Transaction"><i class="fa fa-inr"></i>&nbsp;</a>&nbsp;&nbsp;
                       <a href="#" title="View Wallet Transaction"><i class="fa fa-bar-chart"></i>&nbsp;</a>
                       <a href="#" title="View Retailer List" ><i class="fa fa-users"></i>&nbsp;</a>
+                       <a href="{{route('usermcommission',['id'=>$pageListItem['id']])}}" title="Money Transfer Setting"><i class="fa fa-retweet"></i>&nbsp;</a>&nbsp;&nbsp;
                     </td>
                   </tr>
                 <?php $count++;}} ?>

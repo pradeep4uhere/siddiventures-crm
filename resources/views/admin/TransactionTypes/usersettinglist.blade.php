@@ -62,8 +62,8 @@
                      
                    </td>
                     <td>
-                      <a href="{{route('editusercommission',['id'=>$ListItem['id']])}}"><b>Edit</b></a>&nbsp;&nbsp;|&nbsp;&nbsp;
-                      <a href="{{route('deletusercommission',['id'=>$ListItem['id']])}}"><b>Delete</b></a>
+                      <a href="{{route('editusercommission',['id'=>$ListItem['id']])}}"><b>Edit</b></a>&nbsp;&nbsp;
+                      <!-- <a href="{{route('deletusercommission',['id'=>$ListItem['id']])}}"><b>Delete</b></a> -->
                     </td>
                   </tr>
                   <?php $count++;} ?>

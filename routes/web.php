@@ -45,7 +45,9 @@ Route::any('transactiontypes','TransactionTypeController@transactionTypesList')-
 Route::any('savetransactiontypes','TransactionTypeController@saveTransactionTypesList')->name('savetransactiontypes');
 Route::any('editusercommission/{id}','TransactionTypeController@editUserCommission')->name('editusercommission');
 Route::any('usercommission','TransactionTypeController@userCommissionSetting')->name('usercommission');
-Route::any('deletusercommission/{id}','TransactionTypeController@editUserCommission')->name('deletusercommission');
+Route::any('usermcommission/{id}','TransactionTypeController@userMoneyTransferCommissionSetting')->name('usermcommission');
+Route::any('saveusermcommission','TransactionTypeController@saveusermcommission')->name('saveusermcommission');
+Route::any('deletusercommission/{id}','TransactionTypeController@deleteUserCommission')->name('deletusercommission');
 
 
 //JOB Skills Routes goees here

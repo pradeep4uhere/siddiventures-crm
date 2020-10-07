@@ -75,8 +75,9 @@
                   
                     <td >
                       <a href="{{route('editro',['id'=>$pageListItem['id']])}}" title="Edit {{$pageListItem['first_name']}} Details"><i class="fa fa-pencil"></i>&nbsp;</a>&nbsp;&nbsp;
-                      <a href="#" title="All Recharge Transaction"><i class="fa fa-inr"></i>&nbsp;</a>&nbsp;&nbsp;
-                      <a href="#" title="All Wallet Transaction"><i class="fa fa-bar-chart"></i>&nbsp;</a>&nbsp;&nbsp;
+                      <a href="#" title="Money Transfer Setting"><i class="fa fa-inr"></i>&nbsp;</a>&nbsp;&nbsp;
+                      <!-- <a href="#" title="All Wallet Transaction"><i class="fa fa-bar-chart"></i>&nbsp;</a>&nbsp;&nbsp; -->
+                      <a href="{{route('usermcommission',['id'=>$pageListItem['id']])}}" title="Money Transfer Setting"><i class="fa fa-retweet"></i>&nbsp;</a>&nbsp;&nbsp;
                       
                     </td>
                   </tr>
