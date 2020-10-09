@@ -12,6 +12,7 @@ use App\AgentCommission;
 use App\User;
 use App\AmountType;
 use App\MoneyTransferCharge;
+use DB;
 
 class TransactionTypeController extends Controller
 {
@@ -104,18 +105,26 @@ class TransactionTypeController extends Controller
         $count = count($data['transaction_type_code']);
         $TransactionTypes = array();
         MoneyTransferCharge::where('user_id','=',$userid)->delete();
-
+        //dd($data);
         for($i=0;$i<$count;$i++){
             $TransactionTypes=array(
                 "user_id"       =>  $userid,
                 "amount_type"   =>  $data['ids'][$i],
                 "value"         =>  $data['valueu'][$i],
+                "is_flat_percentage"=>$data['commission_type'][$i],
                 "status"        =>  $data['status'][$i],
                 "created_at"    =>  date('Y-m-d H:i:s')
             );
             $TransactionTypeObj = new MoneyTransferCharge();
-            // dd($TransactionTypes);
-            $TransactionTypeObj->create($TransactionTypes);
+            //dd($TransactionTypes);
+            //dd($TransactionTypes);
+            //echo $TransactionTypeObj->create($TransactionTypes)->toSql(); die;
+            if($TransactionTypeObj->create($TransactionTypes)){
+               //dd(DB::getQueryLog());
+               // dd("OK");
+               // echo DB::table('money_transfer_charges')->get();
+                //die;
+            }
         }
         Session::flash('message', 'Money Transfer Charge Updated Successfully!');
         return redirect()->route('usermcommission',['id'=>$userid]);

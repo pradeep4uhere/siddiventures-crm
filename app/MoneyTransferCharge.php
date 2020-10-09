@@ -19,6 +19,7 @@ class MoneyTransferCharge extends Model
     protected $fillable = [
         'user_id', 
         'amount_type',
+        'is_flat_percentage',
         'value',
         'status',
         'created_at'

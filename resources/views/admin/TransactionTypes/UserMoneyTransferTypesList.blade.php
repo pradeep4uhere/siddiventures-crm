@@ -47,15 +47,27 @@
 
                 </div>
             </div>
+            <?php if(!empty($MoneyTransferCharge)){?>
              <div class="col-md-2">
                 <div class="form-group">
                   <label for="exampleInputEmail1">Comission Type</label>
-                  <select name="commission_type[]" class="form-control" readonly="readonly" disabled="disabled">
+                  <select name="commission_type[]" class="form-control">
+                    <option value="Flat" <?php if($MoneyTransferCharge[$key]['is_flat_percentage']=='Flat'){ ?> selected="selected" <?php } ?>>Flat</option>
+                    <option value="Percentage" <?php if($MoneyTransferCharge[$key]['is_flat_percentage']=='Percentage'){ ?> selected="selected" <?php } ?>>Percentage</option>
+                  </select>
+                </div>
+            </div>
+          <?php }else{ ?>
+             <div class="col-md-2">
+                <div class="form-group">
+                  <label for="exampleInputEmail1">Comission Type</label>
+                  <select name="commission_type[]" class="form-control">
                     <option value="Flat" <?php if($item['type']=='Flat'){ ?> selected="selected" <?php } ?>>Flat</option>
                     <option value="Percentage" <?php if($item['type']=='Percentage'){ ?> selected="selected" <?php } ?>>Percentage</option>
                   </select>
                 </div>
             </div>
+          <?php } ?>
             <div class="col-md-2">
               <!-- /.form-group -->
               <div class="form-group">
