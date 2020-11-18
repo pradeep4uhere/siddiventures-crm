@@ -49,6 +49,16 @@
       </select>
   </div>
 </div>
+ <div class="form-group">
+     <div class="col-sm-6 col-lg-6 col-md-6">
+    <label for="inputEmail3" class=" control-label">Password</label>
+    <input type="text" class="form-control" id="password" placeholder="Enter Password" name="password">
+  </div>
+    <div class="col-sm-10 col-md-6">
+      <label for="inputPassword3" class="control-label">Confirm Password</label>
+      <input type="text" class="form-control" id="confirm_password" placeholder="Enter Confirm Password" name="confirm_password">
+  </div>
+</div>
 <br/>
 <h4 style="padding: 0px; margin: 0px;"><a href="#">User Details</a></h4>
 <hr/>

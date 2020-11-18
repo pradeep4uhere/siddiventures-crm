@@ -12,6 +12,7 @@ use App\UserDetail;
 use App\PaymentWallet;
 use App\City;
 use App\DocumentType;
+use Hash;
 class UserController extends Controller
 {
     
@@ -69,7 +70,6 @@ class UserController extends Controller
        
        
         if ($request->isMethod('post')) {
-
             //dd($user);
             $validator = $this->validator($request->all());
             if($validator->fails()) {
@@ -90,6 +90,17 @@ class UserController extends Controller
             $AgentCode      =   $request->get('AgentCode');
             $status         =   $request->get('status');
             $perMonthlyLimit=   $request->get('per_mobile_monthly_limit');
+            $password       =   $request->get('password');
+            $confirm_password=   $request->get('confirm_password');
+            if($password!=''){
+                if($password == $confirm_password){
+                     $user['password']      =   Hash::make($password);
+                     $user['password_text'] =   $password;
+
+                }else{
+                    Session::flash('message', 'Password did not matched!');
+                }    
+            }
             
 
             $user['first_name']                 =   $first_name;
@@ -99,8 +110,14 @@ class UserController extends Controller
             $user['AgentCode']                  =   $AgentCode;
             $user['per_mobile_monthly_limit']   =   $perMonthlyLimit;
             $user['status']                     =   $status;
+            //dd($user);
             try{
                 $user->save();
+                if($password!=''){
+                    if($password == $confirm_password){
+                        $this->sendLoginDetails($id);
+                    }
+                }
                 $this->saveUserDetails($request, $user->id);
                 Session::flash('message', $first_name." updated successfully");
             }catch(Exception $e){
