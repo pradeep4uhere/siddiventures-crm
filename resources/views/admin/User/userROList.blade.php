@@ -44,6 +44,7 @@
                     <th>Email</th>
                     <th>Mobile</th>
                     <th>Balance</th>
+                    <th>DMT</th>
                     <th>Status</th>
                     <th>Created</th>
                     <th>Action</th>
@@ -62,6 +63,14 @@
                     <?php }else{
                       echo GeneralHelper::getAmount('0.00');
                     } ?>
+                   </td>
+                   <td>
+                    <?php if($pageListItem->DMT==1){  
+                            echo "<font color='green'><b>Enable</b></font>"; 
+                          }else{ 
+                            echo "<font color='red'><b>Disable</b></font>";
+                          } 
+                    ?>
                    </td>
                    <td>
                     <?php if($pageListItem->status==1){  
@@ -88,12 +97,7 @@
               <!-- /.table-responsive -->
             </div>
             <!-- /.box-body -->
-            <div class="box-footer clearfix">
-              <div class="pull-right">
-              {{$userROList->links()}}
-              </div>
-            </div>
-            <!-- /.box-footer -->
+            
           </div>
           <!-- /.box -->
           

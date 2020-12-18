@@ -59,6 +59,22 @@
       <input type="text" class="form-control" id="confirm_password" placeholder="Enter Confirm Password" name="confirm_password">
   </div>
 </div>
+<h4 style="padding: 0px; margin: 0px; color: red"><a href="#" style="color: red">DMT Setting</a></h4>
+<hr/>
+<div class="form-group">
+ <div class="col-sm-10 col-md-6">
+      <label for="inputPassword3" class="control-label">DMT Enable</label>
+      <select class="form-control <?php if($user['DMT']==1){ ?> bg-green <?php }else{ ?> bg-red <?php } ?>" name="DMT">
+        <option value="1" <?php if($user['DMT']==1){ ?> selected="selected" <?php } ?> >YES</option>
+        <option value="0" <?php if($user['DMT']==0){ ?> selected="selected" <?php } ?>>NO</option>
+      </select>
+  </div>
+   <div class="col-sm-10 col-md-6">
+      <label for="inputPassword3" class="control-label">DMT Remarks/Notification</label>
+      <small>You can show message to retailer</small>
+     <input  type="text" name="notification" placeholder="Enter your norification text here" class="form-control" value="{{$user['notification']}}" />
+  </div>
+  </div>
 <br/>
 <h4 style="padding: 0px; margin: 0px;"><a href="#">User Details</a></h4>
 <hr/>

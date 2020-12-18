@@ -45,6 +45,7 @@
                     <th>Mobile</th>
                     <th>Monthly Limit</th>
                     <th>Balance</th>
+                    <th>DMT</th>
                     <th>Status</th>
                     <th>Created</th>
                     <th>Action</th>
@@ -64,6 +65,14 @@
                     <?php }else{
                       echo GeneralHelper::getAmount('0.00');
                     } ?>
+                   </td>
+                    <td>
+                    <?php if($pageListItem->DMT==1){  
+                            echo "<font color='green'><b>Enable</b></font>"; 
+                          }else{ 
+                            echo "<font color='red'><b>Disable</b></font>";
+                          } 
+                    ?>
                    </td>
                    <td>
                     <?php if($pageListItem->status==1){  

@@ -79,7 +79,14 @@ class UserController extends Controller
                         Session::flash($k, $request->get($k));
                     }
             }
-            
+
+            //check if this Agent Code is Present
+            $agentCodeUser = User::where('AgentCode','=',$request->get('AgentCode'))->where('id','!=',$id)->get();
+            if($agentCodeUser->count()>0){
+                $error= "Agent Code Already Present.";
+                Session::flash('error', $error);
+                return redirect()->route('editds',['id'=>$id])->with('Agent Code Already Present.');
+            }    
             $user =User::with('UserDetail','PaymentWallet')->find($id);
             
             //dd($request->all());
@@ -91,7 +98,11 @@ class UserController extends Controller
             $status         =   $request->get('status');
             $perMonthlyLimit=   $request->get('per_mobile_monthly_limit');
             $password       =   $request->get('password');
-            $confirm_password=   $request->get('confirm_password');
+            $role_id        =   $request->get('role_id');
+            $confirm_password=  $request->get('confirm_password');
+            $DMT             =  $request->get('DMT');
+            $notification    =  $request->get('notification');
+
             if($password!=''){
                 if($password == $confirm_password){
                      $user['password']      =   Hash::make($password);
@@ -109,7 +120,10 @@ class UserController extends Controller
             $user['email']                      =   $email;
             $user['AgentCode']                  =   $AgentCode;
             $user['per_mobile_monthly_limit']   =   $perMonthlyLimit;
+            $user['role_id']                    =   $role_id;
             $user['status']                     =   $status;
+            $user['DMT']                        =   $DMT;
+            $user['notification']               =   $notification;
             //dd($user);
             try{
                 $user->save();
@@ -140,22 +154,24 @@ class UserController extends Controller
 
     private function saveUserDetails(Request $request, $user_id){
         $userDetails = UserDetail::where('user_id','=',$user_id)->first();
-        $userDetails['date_of_birth']    =   date('Y-m-d',strtotime($request->get('date_of_birth')));
-        $userDetails['address_line_1']   =   $request->get('address_line_1');
-        $userDetails['address_line_2']   =   $request->get('address_line_2');
-        $userDetails['district']         =   $request->get('district');
-        $userDetails['city_id']          =   $request->get('city_id');
-        $userDetails['pincode']          =   $request->get('pincode');
-        $userDetails['state_id']         =   $request->get('state_id');
-        $userDetails['company_type']     =   $request->get('company_type');
-        $userDetails['company_name']     =   $request->get('company_name');
-        $userDetails['service_by']       =   $request->get('service_by');
-        $userDetails['zone']             =   $request->get('zone');
-        $userDetails['identification_type']=   $request->get('identification_type');
-        $userDetails['is_name_on_pan_card']=   $request->get('is_name_on_pan_card');
-        $userDetails['pan_card_number']=   $request->get('pan_card_number');
-        if($userDetails->save()){
-            return true;
+        if(!empty($userDetails)){
+            $userDetails['date_of_birth']    =   date('Y-m-d',strtotime($request->get('date_of_birth')));
+            $userDetails['address_line_1']   =   $request->get('address_line_1');
+            $userDetails['address_line_2']   =   $request->get('address_line_2');
+            $userDetails['district']         =   $request->get('district');
+            $userDetails['city_id']          =   $request->get('city_id');
+            $userDetails['pincode']          =   $request->get('pincode');
+            $userDetails['state_id']         =   $request->get('state_id');
+            $userDetails['company_type']     =   $request->get('company_type');
+            $userDetails['company_name']     =   $request->get('company_name');
+            $userDetails['service_by']       =   $request->get('service_by');
+            $userDetails['zone']             =   $request->get('zone');
+            $userDetails['identification_type']=   $request->get('identification_type');
+            $userDetails['is_name_on_pan_card']=   $request->get('is_name_on_pan_card');
+            $userDetails['pan_card_number']=   $request->get('pan_card_number');
+            if($userDetails->save()){
+                return true;
+            }
         }
     }
 
@@ -193,6 +209,21 @@ class UserController extends Controller
             $status         =   $request->get('status');
             $parent_user_id =   $request->get('parent_user_id');
             $perMonthlyLimit=   $request->get('per_mobile_monthly_limit');
+
+            $password       =   $request->get('password');
+            $role_id        =   $request->get('role_id');
+            $confirm_password=  $request->get('confirm_password');
+            $DMT             =  $request->get('DMT');
+            $notification    =  $request->get('notification');
+            if($password!=''){
+                if($password == $confirm_password){
+                     $user['password']      =   Hash::make($password);
+                     $user['password_text'] =   $password;
+
+                }else{
+                    Session::flash('message', 'Password did not matched!');
+                }    
+            }
             
 
             $user['parent_user_id']         =   $parent_user_id;
@@ -200,11 +231,19 @@ class UserController extends Controller
             $user['last_name']              =   $last_name;
             $user['mobile']                 =   $mobile;
             $user['email']                  =   $email;
+            $user['role_id']                =   $role_id;
             $user['AgentCode']              =   $AgentCode;
             $user['per_mobile_monthly_limit']      =   $perMonthlyLimit;
             $user['status']                 =   $status;
+            $user['DMT']                    =   $DMT;
+            $user['notification']           =   $notification;
             try{
                 $user->save();
+                if($password!=''){
+                    if($password == $confirm_password){
+                        $this->sendLoginDetails($id);
+                    }
+                }
                 $this->saveUserDetails($request, $user->id);
                 Session::flash('message', "Retailer ".$first_name." updated successfully");
             }catch(Exception $e){

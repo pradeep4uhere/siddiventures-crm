@@ -30,6 +30,11 @@
         <p>{{ $message }}</p>
       </div>
       @endif
+      @if(Session::get('error')!='')
+      <div class="alert alert-danger">
+         <p>{{Session::get('error')}}</p>
+      </div>
+      @endif
       <!-- /.row -->
       <!-- Main row -->
       <div class="row">
